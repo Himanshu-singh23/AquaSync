@@ -1,13 +1,26 @@
 <nav x-data="{ open: false }" class="bg-cyan-950 border-b border-cyan-800">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 lg:mx-2">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-cyan-400" />
-                    </a>
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+        <svg
+            width="40"
+            height="40"
+            viewBox="0 0 1024 1024"
+            class="w-10 h-10"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+        >
+            <path d="M512 512m-480 0a480 480 0 1 0 960 0 480 480 0 1 0-960 0Z" fill="#E5F1FF"></path>
+            <path d="M512 179.2c-96 102.4-262.4 236.8-262.4 384s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4-160-281.6-262.4-384z" fill="#9FC8FE"></path>
+            <path d="M512 684.8c-57.6 0-102.4-44.8-102.4-108.8 0-57.6 64-102.4 102.4-147.2 38.4 44.8 102.4 89.6 102.4 147.2 0 57.6-44.8 108.8-102.4 108.8z" fill="#72AEFD"></path>
+        </svg>
+
+        <span class="text-2xl font-bold text-blue-400">Aqua Sync</span>
+    </a>
                 </div>
 
                 <!-- Navigation Links -->
