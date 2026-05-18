@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     // Admin routes
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::post('/admin/users/{user}/validate', [AdminController::class, 'validateUser'])->name('admin.users.validate');
+    Route::delete('/admin/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
     Route::delete('/admin/tips/{tip}', [AdminController::class, 'destroyTip'])->name('admin.tips.destroy');
     Route::post('/goals', [App\Http\Controllers\GoalController::class, 'store'])->name('goals.store');
 Route::delete('/admin/services/{service}', [App\Http\Controllers\AdminController::class, 'destroyService'])->name('admin.services.destroy');

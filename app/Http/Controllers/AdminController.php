@@ -28,8 +28,9 @@ class AdminController extends Controller
 
         $tips = Tip::with('user')->latest()->get();
         $services = Service::with('user')->latest()->get();
+        $allUsers = User::where('id', '!=', auth()->id())->get();
             
-        return view('admin.dashboard', compact('pendingUsers', 'tips', 'services'));
+        return view('admin.dashboard', compact('pendingUsers', 'tips', 'services', 'allUsers'));
     }
 
     public function validateUser(User $user)
@@ -54,5 +55,13 @@ class AdminController extends Controller
 
         $service->delete();
         return redirect()->route('admin.dashboard')->with('success', 'Service offering deleted successfully.');
+    }
+
+    public function destroyUser(User $user)
+    {
+        $this->checkAdmin();
+
+        $user->delete();
+        return redirect()->route('admin.dashboard')->with('success', 'User account permanently deleted successfully.');
     }
 }

@@ -60,6 +60,11 @@
                         <span>Manage Services</span>
                         <span class="ml-2 bg-teal-900 text-teal-300 text-xs px-2.5 py-0.5 rounded-full font-black border border-teal-800">{{ $services->count() }}</span>
                     </button>
+                    <button onclick="switchTab('users')" id="tab-btn-users" class="px-8 py-5 text-sm font-extrabold border-b-4 border-transparent text-cyan-600/70 hover:text-cyan-300 hover:border-cyan-700 focus:outline-none transition-all flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <span>Manage Users</span>
+                        <span class="ml-2 bg-indigo-900 text-indigo-300 text-xs px-2.5 py-0.5 rounded-full font-black border border-indigo-800">{{ $allUsers->count() }}</span>
+                    </button>
                 </div>
 
                 <!-- Tab Panel: Pending Validations -->
@@ -218,6 +223,62 @@
                             </svg>
                             <h3 class="mt-4 text-lg font-bold text-cyan-100">No Services Listed</h3>
                             <p class="mt-2 text-sm text-cyan-400/70 font-medium">Registered service providers have not created any offerings yet.</p>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Tab Panel: Manage Users -->
+                <div id="tab-panel-users" class="tab-panel p-8 hidden">
+                    @if($allUsers->count() > 0)
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-cyan-800/50 align-middle">
+                                <thead class="bg-cyan-950/50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-cyan-500 uppercase tracking-wider">Name</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-cyan-500 uppercase tracking-wider">Email</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-cyan-500 uppercase tracking-wider">Role</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-cyan-500 uppercase tracking-wider">Registered On</th>
+                                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-cyan-500 uppercase tracking-wider">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-transparent divide-y divide-cyan-800/50">
+                                    @foreach($allUsers as $user)
+                                        <tr class="hover:bg-cyan-900/30 transition">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="font-bold text-cyan-100">{{ $user->name }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-cyan-400 font-semibold">{{ $user->email }}</div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-extrabold rounded-full {{ $user->role === 'expert' ? 'bg-blue-900/50 text-blue-300 border border-blue-700' : ($user->role === 'provider' ? 'bg-teal-900/50 text-teal-300 border border-teal-700' : 'bg-slate-800 text-slate-300 border border-slate-700') }} uppercase">
+                                                    {{ $user->role }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-cyan-600 font-semibold">
+                                                {{ $user->created_at->format('M d, Y') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to permanently delete this user account?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="inline-flex items-center space-x-1.5 bg-rose-900/30 text-rose-400 hover:bg-rose-800 hover:text-white border border-rose-800 hover:border-transparent px-3.5 py-1.5 rounded-xl text-xs font-black transition-all duration-200 shadow-sm hover:shadow-md transform active:scale-95">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                        <span>Delete Account</span>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-16">
+                            <svg class="mx-auto h-16 w-16 text-cyan-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <h3 class="mt-4 text-lg font-bold text-cyan-100">No Users Found</h3>
                         </div>
                     @endif
                 </div>
