@@ -283,7 +283,9 @@
                     @endif
                 </div>
             </div>
-
+            <footer class="fixed bottom-0 left-0 w-full pt-2 pb-4 bg-slate-900 text-center text-sm text-cyan-500/60 border-t border-cyan-800/30 z-200">
+                <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
+            </footer>
         </div>
     </div>
 

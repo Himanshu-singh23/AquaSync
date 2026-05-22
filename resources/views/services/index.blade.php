@@ -22,7 +22,10 @@
             <!-- List Providers & Services -->
             <div class="space-y-12">
                 @forelse($providers as $provider)
-                    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-blue-300 p-8 space-y-6">
+                    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-blue-300 p-8 space-y-6 relative">
+                        <!-- Blue Inline -->
+                        <div class="absolute inset-0 border-4 border-blue-500 rounded-3xl pointer-events-none"></div>
+
                         <!-- Provider Info -->
                         <div class="flex items-center space-x-4 border-b border-gray-100 pb-4">
                             <div class="bg-blue-100 text-blue-600 rounded-2xl p-3">
@@ -70,7 +73,7 @@
             </div>
 
             <!-- Footer -->
-            <footer class="pt-8 pb-4 mt-8 text-center text-sm text-blue-500 border-t border-gray-200">
+            <footer class="pt-8 pb-4 mt-8 text-center text-sm text-blue-500 border-t border-gray-200 fixed bottom-0 left-0 right-0">
                 <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
             </footer>
         </div>
