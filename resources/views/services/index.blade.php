@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-2xl text-white leading-tight">
             {{ __('Water Conservation Services Marketplace') }}
         </h2>
     </x-slot>
@@ -22,7 +22,7 @@
             <!-- List Providers & Services -->
             <div class="space-y-12">
                 @forelse($providers as $provider)
-                    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8 space-y-6">
+                    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-blue-300 p-8 space-y-6">
                         <!-- Provider Info -->
                         <div class="flex items-center space-x-4 border-b border-gray-100 pb-4">
                             <div class="bg-blue-100 text-blue-600 rounded-2xl p-3">
@@ -68,7 +68,11 @@
                     </div>
                 @endforelse
             </div>
-            
+
+            <!-- Footer -->
+            <footer class="pt-8 pb-4 mt-8 text-center text-sm text-blue-500 border-t border-gray-200">
+                <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
+            </footer>
         </div>
     </div>
 </x-app-layout>

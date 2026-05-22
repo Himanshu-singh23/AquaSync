@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-white min-h-screen text-slate-200">
+    <div class="py-12 bg-slate-900 min-h-screen text-slate-200">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             
             @if(session('success'))
@@ -183,6 +183,11 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Footer -->
+            <footer class="fixed bottom-0 left-0 w-full pt-2 pb-4 bg-slate-900/95 backdrop-blur text-center text-sm text-cyan-500/60 border-t border-cyan-800/30 z-50">
+                <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
+            </footer>
         </div>
     </div>
 </x-app-layout>

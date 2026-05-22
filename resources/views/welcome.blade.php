@@ -37,12 +37,22 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 
                 <!-- Logo -->
-                <a href="/" class="flex items-center space-x-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-400 to-teal-400 flex items-center justify-center shadow-lg group-hover:scale-105 transition transform duration-200">
-                        <svg class="w-6 h-6 text-slate-900" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a8 8 0 00-8 8 .75.75 0 01-1.5 0 9.5 9.5 0 0119 0 .75.75 0 01-1.5 0 8 8 0 00-8-8zM2.166 11.372a.75.75 0 011.05-.172 8.25 8.25 0 0013.564 0 .75.75 0 111.222.868 9.75 9.75 0 01-16.008 0 .75.75 0 01.172-1.046z" clip-rule="evenodd" /></svg>
-                    </div>
-                    <span class="text-2xl font-black bg-gradient-to-r from-white via-slate-100 to-sky-200 bg-clip-text text-transparent tracking-tight">AquaSync</span>
-                </a>
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
+        <svg
+            width="40"
+            height="40"
+            viewBox="0 0 1024 1024"
+            class="w-10 h-10"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+        >
+            <path d="M512 512m-480 0a480 480 0 1 0 960 0 480 480 0 1 0-960 0Z" fill="#E5F1FF"></path>
+            <path d="M512 179.2c-96 102.4-262.4 236.8-262.4 384s115.2 262.4 262.4 262.4 262.4-115.2 262.4-262.4-160-281.6-262.4-384z" fill="#9FC8FE"></path>
+            <path d="M512 684.8c-57.6 0-102.4-44.8-102.4-108.8 0-57.6 64-102.4 102.4-147.2 38.4 44.8 102.4 89.6 102.4 147.2 0 57.6-44.8 108.8-102.4 108.8z" fill="#72AEFD"></path>
+        </svg>
+
+        <span class="text-2xl font-bold text-blue-400">Aqua Sync</span>
+    </a>
 
                 <!-- Navigation Options -->
                 <div class="flex items-center space-x-4">
