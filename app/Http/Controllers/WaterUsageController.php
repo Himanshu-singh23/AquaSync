@@ -12,8 +12,13 @@ class WaterUsageController extends Controller
 {
     public function create()
     {
-        $devices = auth()->user()->devices;
-        return view('usages.create', compact('devices'));
+        $user = auth()->user();
+        $devices = $user->devices;
+        
+        $totalUsage = $devices->flatMap->waterUsages->sum('consumed_liters');
+        $currentGoal = $user->goals()->where('month_year', date('m-Y'))->first();
+
+        return view('usages.create', compact('devices', 'totalUsage', 'currentGoal'));
     }
 
     public function store(Request $request)
@@ -24,12 +29,21 @@ class WaterUsageController extends Controller
             'recorded_at' => 'required|date',
         ]);
 
-        $device = auth()->user()->devices()->findOrFail($validated['device_id']);
+        $user = auth()->user();
+        $device = $user->devices()->findOrFail($validated['device_id']);
 
         $device->waterUsages()->create([
             'consumed_liters' => $validated['consumed_liters'],
             'recorded_at' => $validated['recorded_at'],
         ]);
+
+        $devices = $user->devices()->with('waterUsages')->get();
+        $totalUsage = $devices->flatMap->waterUsages->sum('consumed_liters');
+        $currentGoal = $user->goals()->where('month_year', date('m-Y'))->first();
+
+        if ($currentGoal && $currentGoal->target_liters_per_month > 0 && $totalUsage > $currentGoal->target_liters_per_month) {
+            return redirect()->route('dashboard')->with('warning', 'Water usage logged! However, you have exceeded your monthly goal. Please consider adjusting your goal.');
+        }
 
         return redirect()->route('dashboard')->with('success', 'Water usage logged successfully!');
     }

@@ -18,7 +18,6 @@
             </div>
             @endif
 
-            <!-- Admin Overview Banner (Cyber twilight slate card) -->
             <div class="bg-[#041d2c] rounded-3xl p-8 shadow-2xl relative overflow-hidden text-cyan-50 border border-cyan-800/80 backdrop-blur-md">
                 <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-600"></div>
                 <div class="absolute right-0 bottom-0 opacity-10 transform translate-x-12 translate-y-12 pointer-events-none text-cyan-500">
@@ -40,10 +39,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Modern Interactive Tabs Component -->
             <div class="bg-cyan-900/30 rounded-3xl shadow-xl overflow-hidden border border-cyan-800/50 backdrop-blur-md">
-                <!-- Tab Buttons Navigation -->
                 <div class="border-b border-cyan-800/50 bg-cyan-950/50 flex flex-wrap">
                     <button onclick="switchTab('pending')" id="tab-btn-pending" class="px-8 py-5 text-sm font-extrabold border-b-4 border-cyan-400 text-cyan-400 focus:outline-none transition-all flex items-center space-x-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.952 11.952 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
@@ -67,7 +63,6 @@
                     </button>
                 </div>
 
-                <!-- Tab Panel: Pending Validations -->
                 <div id="tab-panel-pending" class="tab-panel p-8">
                     @if($pendingUsers->count() > 0)
                         <div class="overflow-x-auto">
@@ -122,7 +117,7 @@
                     @endif
                 </div>
 
-                <!-- Tab Panel: Manage Expert Tips -->
+            
                 <div id="tab-panel-tips" class="tab-panel p-8 hidden">
                     @if($tips->count() > 0)
                         <div class="overflow-x-auto">
@@ -181,8 +176,6 @@
                         </div>
                     @endif
                 </div>
-
-                <!-- Tab Panel: Manage Services -->
                 <div id="tab-panel-services" class="tab-panel p-8 hidden">
                     @if($services->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -227,7 +220,6 @@
                     @endif
                 </div>
 
-                <!-- Tab Panel: Manage Users -->
                 <div id="tab-panel-users" class="tab-panel p-8 hidden">
                     @if($allUsers->count() > 0)
                         <div class="overflow-x-auto">
@@ -288,24 +280,17 @@
             </footer>
         </div>
     </div>
-
-    <!-- Switch Tab Javascript Logic -->
     <script>
         function switchTab(tabId) {
-            // Hide all tab panels
             document.querySelectorAll('.tab-panel').forEach(panel => {
                 panel.classList.add('hidden');
             });
-            // Show requested tab panel
             document.getElementById('tab-panel-' + tabId).classList.remove('hidden');
 
-            // Reset all tab button styles to inactive
             document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
                 btn.classList.remove('border-cyan-400', 'text-cyan-400');
                 btn.classList.add('border-transparent', 'text-cyan-600/70');
             });
-
-            // Set current tab button style to active
             const activeBtn = document.getElementById('tab-btn-' + tabId);
             activeBtn.classList.remove('border-transparent', 'text-cyan-600/70');
             activeBtn.classList.add('border-cyan-400', 'text-cyan-400');
