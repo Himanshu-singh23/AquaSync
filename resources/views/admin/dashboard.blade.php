@@ -61,6 +61,10 @@
                         <span>Manage Users</span>
                         <span class="ml-2 bg-indigo-900 text-indigo-300 text-xs px-2.5 py-0.5 rounded-full font-black border border-indigo-800">{{ $allUsers->count() }}</span>
                     </button>
+                    <button onclick="switchTab('statistics')" id="tab-btn-statistics" class="px-8 py-5 text-sm font-extrabold border-b-4 border-transparent text-cyan-600/70 hover:text-cyan-300 hover:border-cyan-700 focus:outline-none transition-all flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                        <span>Statistics</span>
+                    </button>
                 </div>
 
                 <div id="tab-panel-pending" class="tab-panel p-8">
@@ -274,13 +278,99 @@
                         </div>
                     @endif
                 </div>
+
+                <div id="tab-panel-statistics" class="tab-panel p-8 hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-cyan-950/40 rounded-2xl p-6 border border-cyan-700/50 shadow-md">
+                            <h4 class="text-lg font-bold text-cyan-100 mb-4">Total Water Usage Over Time</h4>
+                            <div class="relative h-72 w-full">
+                                <canvas id="usageTimeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-cyan-950/40 rounded-2xl p-6 border border-cyan-700/50 shadow-md">
+                            <h4 class="text-lg font-bold text-cyan-100 mb-4">Water Usage by Device Type</h4>
+                            <div class="relative h-72 w-full flex justify-center">
+                                <canvas id="usageDeviceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <footer class="fixed bottom-0 left-0 w-full pt-2 pb-4 bg-slate-900 text-center text-sm text-cyan-500/60 border-t border-cyan-800/30 z-200">
                 <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
             </footer>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data for Time Chart
+            const timeData = @json($usageByDate);
+            const timeLabels = timeData.map(item => item.date);
+            const timeValues = timeData.map(item => item.total);
+
+            const ctxTime = document.getElementById('usageTimeChart').getContext('2d');
+            new Chart(ctxTime, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: 'Total Liters Consumed',
+                        data: timeValues,
+                        borderColor: '#22d3ee', // cyan-400
+                        backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#0891b2', // cyan-600
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cffafe' } } // cyan-100
+                    },
+                    scales: {
+                        x: { ticks: { color: '#67e8f9' }, grid: { color: 'rgba(8, 145, 178, 0.2)' } }, // cyan-300
+                        y: { ticks: { color: '#67e8f9' }, grid: { color: 'rgba(8, 145, 178, 0.2)' }, beginAtZero: true }
+                    }
+                }
+            });
+
+            // Data for Device Chart
+            const deviceData = @json($usageByDevice);
+            const deviceLabels = deviceData.map(item => item.type.charAt(0).toUpperCase() + item.type.slice(1));
+            const deviceValues = deviceData.map(item => item.total);
+
+            const ctxDevice = document.getElementById('usageDeviceChart').getContext('2d');
+            new Chart(ctxDevice, {
+                type: 'doughnut',
+                data: {
+                    labels: deviceLabels,
+                    datasets: [{
+                        data: deviceValues,
+                        backgroundColor: [
+                            '#06b6d4', // cyan-500
+                            '#3b82f6', // blue-500
+                            '#14b8a6', // teal-500
+                            '#8b5cf6', // violet-500
+                            '#0ea5e9'  // sky-500
+                        ],
+                        borderColor: '#041d2c',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#cffafe', padding: 20 } }
+                    }
+                }
+            });
+        });
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-panel').forEach(panel => {
                 panel.classList.add('hidden');

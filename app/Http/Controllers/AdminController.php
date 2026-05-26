@@ -30,7 +30,18 @@ class AdminController extends Controller
         $services = Service::with('user')->latest()->get();
         $allUsers = User::where('id', '!=', auth()->id())->get();
             
-        return view('admin.dashboard', compact('pendingUsers', 'tips', 'services', 'allUsers'));
+        // Statistics Data
+        $usageByDate = \App\Models\WaterUsage::selectRaw('DATE(recorded_at) as date, SUM(consumed_liters) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $usageByDevice = \App\Models\WaterUsage::join('devices', 'water_usages.device_id', '=', 'devices.id')
+            ->selectRaw('devices.type, SUM(water_usages.consumed_liters) as total')
+            ->groupBy('devices.type')
+            ->get();
+
+        return view('admin.dashboard', compact('pendingUsers', 'tips', 'services', 'allUsers', 'usageByDate', 'usageByDevice'));
     }
 
     public function validateUser(User $user)

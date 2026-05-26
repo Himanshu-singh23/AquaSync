@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-slate-900 min-h-screen text-slate-200">
+    <div class="py-12 bg-white min-h-screen text-slate-800">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
             
             @if(session('success'))
@@ -194,10 +194,103 @@
                 </div>
             </div>
 
+            <!-- Usage Analytics Section -->
+            <div class="bg-cyan-700/10 backdrop-blur-md overflow-hidden shadow-xl sm:rounded-2xl border border-cyan-800/20 mt-8">
+                <div class="p-6 lg:p-8 border-b border-cyan-800/10">
+                    <h2 class="text-2xl font-bold text-cyan-900 mb-6">Usage Analytics</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white rounded-2xl p-6 border border-cyan-100 shadow-md">
+                            <h3 class="text-lg font-bold text-cyan-800 mb-4">Water Usage Over Time</h3>
+                            <div class="relative h-72 w-full">
+                                <canvas id="userTimeChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl p-6 border border-cyan-100 shadow-md">
+                            <h3 class="text-lg font-bold text-cyan-800 mb-4">Monthly Usage vs Goal</h3>
+                            <div class="relative h-72 w-full flex justify-center">
+                                <canvas id="userLimitChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Footer -->
-            <footer class="fixed bottom-0 left-0 w-full pt-2 pb-4 bg-slate-900 backdrop-blur text-center text-sm text-cyan-500/60 border-t border-cyan-800/30 z-50">
+            <footer class="fixed bottom-0 left-0 w-full pt-2 pb-4 bg-white backdrop-blur text-center text-sm text-cyan-600/80 border-t border-cyan-100 z-50">
                 <p>&copy; {{ date('Y') }} AquaSync. All rights reserved.</p>
             </footer>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data for Time Chart
+            const timeData = @json($usageByDate);
+            const timeLabels = timeData.map(item => item.date);
+            const timeValues = timeData.map(item => item.total);
+
+            const ctxTime = document.getElementById('userTimeChart').getContext('2d');
+            new Chart(ctxTime, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: 'Total Liters Consumed',
+                        data: timeValues,
+                        borderColor: '#0284c7', // sky-600
+                        backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#0369a1', // sky-700
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Data for Limit Chart (Bar with line)
+            const currentGoal = {{ $currentGoal ? $currentGoal->target_liters_per_month : 0 }};
+            const totalUsage = {{ $totalUsage }};
+            
+            const ctxLimit = document.getElementById('userLimitChart').getContext('2d');
+            new Chart(ctxLimit, {
+                type: 'bar',
+                data: {
+                    labels: ['Usage vs Limit'],
+                    datasets: [
+                        {
+                            label: 'Total Usage',
+                            data: [totalUsage],
+                            backgroundColor: '#06b6d4', // cyan-500
+                            barThickness: 60
+                        },
+                        {
+                            label: 'Monthly Limit',
+                            data: [currentGoal],
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)', // transparent red
+                            borderColor: '#ef4444', // red-500
+                            borderWidth: 3,
+                            barThickness: 60
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            suggestedMax: Math.max(currentGoal, totalUsage) * 1.2
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </x-app-layout>

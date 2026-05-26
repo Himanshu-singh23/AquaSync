@@ -21,6 +21,12 @@ class DashboardController extends Controller
         $currentGoal = $user->goals()->where('month_year', date('m-Y'))->first();
         $tips = Tip::inRandomOrder()->take(3)->get();
         
-        return view('dashboard', compact('devices', 'totalUsage', 'currentGoal', 'tips'));
+        $usageByDate = \App\Models\WaterUsage::whereIn('device_id', $devices->pluck('id'))
+            ->selectRaw('DATE(recorded_at) as date, SUM(consumed_liters) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+        
+        return view('dashboard', compact('devices', 'totalUsage', 'currentGoal', 'tips', 'usageByDate'));
     }
 }
